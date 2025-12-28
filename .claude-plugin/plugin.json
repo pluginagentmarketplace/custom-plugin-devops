@@ -1,0 +1,32 @@
+{
+  "name": "devops-automation-plugin",
+  "version": "2.0.0",
+  "description": "Comprehensive DevOps plugin with 7 specialized agents covering Linux, networking, containers, CI/CD, IaC, monitoring, and cloud infrastructure. Complete roadmap.sh/devops curriculum implementation.",
+  "author": {
+    "name": "Dr. Umit Kacar & Muhsin Elcicek",
+    "email": "kacarumit.phd@gmail.com",
+    "url": "https://github.com/pluginagentmarketplace"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
+  "homepage": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
+  "keywords": [
+    "devops",
+    "linux",
+    "docker",
+    "kubernetes",
+    "terraform",
+    "ansible",
+    "cicd",
+    "jenkins",
+    "github-actions",
+    "monitoring",
+    "prometheus",
+    "grafana",
+    "aws",
+    "azure",
+    "gcp",
+    "infrastructure-as-code",
+    "automation"
+  ]
+}
