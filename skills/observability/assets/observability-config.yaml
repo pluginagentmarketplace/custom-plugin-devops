@@ -1,0 +1,248 @@
+# Observability Configuration
+# Tracing, metrics, and logs correlation
+
+three_pillars:
+  logs:
+    purpose: "What happened"
+    tools:
+      - ELK Stack
+      - Loki
+      - Splunk
+    correlation: "trace_id, span_id"
+
+  metrics:
+    purpose: "How much/how many"
+    tools:
+      - Prometheus
+      - Datadog
+      - CloudWatch
+    types:
+      - Counter
+      - Gauge
+      - Histogram
+      - Summary
+
+  traces:
+    purpose: "Request flow through services"
+    tools:
+      - Jaeger
+      - Zipkin
+      - Tempo
+    components:
+      - trace_id
+      - span_id
+      - parent_span_id
+      - operation_name
+      - duration
+
+opentelemetry:
+  collector:
+    deployment: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: otel-collector
+      spec:
+        selector:
+          matchLabels:
+            app: otel-collector
+        template:
+          spec:
+            containers:
+              - name: collector
+                image: otel/opentelemetry-collector-contrib:0.91.0
+                ports:
+                  - containerPort: 4317  # OTLP gRPC
+                  - containerPort: 4318  # OTLP HTTP
+                  - containerPort: 8888  # Metrics
+                volumeMounts:
+                  - name: config
+                    mountPath: /etc/otelcol-contrib
+            volumes:
+              - name: config
+                configMap:
+                  name: otel-collector-config
+
+    config: |
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+
+      processors:
+        batch:
+          timeout: 1s
+          send_batch_size: 1024
+
+        memory_limiter:
+          limit_mib: 512
+          spike_limit_mib: 128
+
+      exporters:
+        jaeger:
+          endpoint: jaeger-collector:14250
+          tls:
+            insecure: true
+
+        prometheus:
+          endpoint: 0.0.0.0:8889
+
+        loki:
+          endpoint: http://loki:3100/loki/api/v1/push
+
+      service:
+        pipelines:
+          traces:
+            receivers: [otlp]
+            processors: [memory_limiter, batch]
+            exporters: [jaeger]
+          metrics:
+            receivers: [otlp]
+            processors: [memory_limiter, batch]
+            exporters: [prometheus]
+          logs:
+            receivers: [otlp]
+            processors: [memory_limiter, batch]
+            exporters: [loki]
+
+  python_instrumentation: |
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.flask import FlaskInstrumentor
+    from opentelemetry.instrumentation.requests import RequestsInstrumentor
+
+    # Set up tracing
+    trace.set_tracer_provider(TracerProvider())
+    tracer = trace.get_tracer(__name__)
+
+    # Configure OTLP exporter
+    otlp_exporter = OTLPSpanExporter(endpoint="otel-collector:4317")
+    trace.get_tracer_provider().add_span_processor(
+        BatchSpanProcessor(otlp_exporter)
+    )
+
+    # Auto-instrument Flask and requests
+    FlaskInstrumentor().instrument()
+    RequestsInstrumentor().instrument()
+
+    # Manual instrumentation
+    with tracer.start_as_current_span("my-operation") as span:
+        span.set_attribute("user.id", user_id)
+        result = process_request()
+        span.set_attribute("result.count", len(result))
+
+  go_instrumentation: |
+    import (
+        "go.opentelemetry.io/otel"
+        "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+        "go.opentelemetry.io/otel/sdk/trace"
+    )
+
+    func initTracer() func() {
+        exporter, _ := otlptracegrpc.New(
+            context.Background(),
+            otlptracegrpc.WithEndpoint("otel-collector:4317"),
+            otlptracegrpc.WithInsecure(),
+        )
+
+        tp := trace.NewTracerProvider(
+            trace.WithBatcher(exporter),
+        )
+        otel.SetTracerProvider(tp)
+
+        return func() { tp.Shutdown(context.Background()) }
+    }
+
+jaeger:
+  installation: |
+    helm install jaeger jaegertracing/jaeger \
+      --set collector.service.type=ClusterIP \
+      --set query.service.type=LoadBalancer
+
+  all_in_one: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: jaeger
+    spec:
+      selector:
+        matchLabels:
+          app: jaeger
+      template:
+        spec:
+          containers:
+            - name: jaeger
+              image: jaegertracing/all-in-one:1.53
+              ports:
+                - containerPort: 16686  # UI
+                - containerPort: 14250  # Collector gRPC
+                - containerPort: 6831   # Agent UDP
+
+slos_and_error_budgets:
+  slo_definition:
+    availability:
+      target: 99.9%
+      window: 30d
+      formula: "successful_requests / total_requests"
+
+    latency:
+      target: 95th percentile < 200ms
+      window: 30d
+
+  error_budget:
+    calculation: |
+      error_budget = (1 - SLO_target) * total_requests
+      # For 99.9% SLO with 1M requests:
+      # error_budget = 0.001 * 1,000,000 = 1,000 errors allowed
+
+    alerts:
+      burn_rate_1h: |
+        # Alert if burning budget too fast (1 hour window)
+        sum(rate(http_requests_total{status=~"5.."}[1h]))
+        /
+        sum(rate(http_requests_total[1h]))
+        > 14.4 * (1 - 0.999)
+
+      burn_rate_6h: |
+        # Alert if burning budget (6 hour window)
+        sum(rate(http_requests_total{status=~"5.."}[6h]))
+        /
+        sum(rate(http_requests_total[6h]))
+        > 6 * (1 - 0.999)
+
+sampling_strategies:
+  head_based:
+    description: "Decide at trace start"
+    types:
+      probabilistic: "Sample X% of traces"
+      rate_limiting: "Sample N traces per second"
+
+  tail_based:
+    description: "Decide after trace complete"
+    benefits:
+      - "Keep all error traces"
+      - "Keep slow traces"
+      - "Better for debugging"
+
+best_practices:
+  instrumentation:
+    - "Use auto-instrumentation first"
+    - "Add custom spans for business logic"
+    - "Include meaningful attributes"
+    - "Propagate context across services"
+
+  performance:
+    - "Use sampling for high-volume services"
+    - "Batch span exports"
+    - "Monitor collector resources"
+
+  analysis:
+    - "Create service dependency maps"
+    - "Track latency by operation"
+    - "Correlate traces with logs"
+    - "Set up alerting on trace metrics"

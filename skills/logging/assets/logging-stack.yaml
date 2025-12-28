@@ -1,0 +1,253 @@
+# Logging Stack Configuration
+# ELK, Loki, and Fluentd patterns
+
+elk_stack:
+  elasticsearch:
+    deployment: |
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: elasticsearch
+      spec:
+        serviceName: elasticsearch
+        replicas: 3
+        selector:
+          matchLabels:
+            app: elasticsearch
+        template:
+          spec:
+            containers:
+              - name: elasticsearch
+                image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+                env:
+                  - name: discovery.type
+                    value: multi-node
+                  - name: cluster.name
+                    value: logs-cluster
+                  - name: xpack.security.enabled
+                    value: "true"
+                resources:
+                  requests:
+                    memory: 2Gi
+                    cpu: 1000m
+                ports:
+                  - containerPort: 9200
+                  - containerPort: 9300
+
+    index_template: |
+      PUT _index_template/logs
+      {
+        "index_patterns": ["logs-*"],
+        "template": {
+          "settings": {
+            "number_of_shards": 3,
+            "number_of_replicas": 1
+          },
+          "mappings": {
+            "properties": {
+              "@timestamp": { "type": "date" },
+              "message": { "type": "text" },
+              "level": { "type": "keyword" },
+              "service": { "type": "keyword" },
+              "trace_id": { "type": "keyword" }
+            }
+          }
+        }
+      }
+
+    ilm_policy: |
+      PUT _ilm/policy/logs-policy
+      {
+        "policy": {
+          "phases": {
+            "hot": {
+              "actions": {
+                "rollover": {
+                  "max_size": "50gb",
+                  "max_age": "1d"
+                }
+              }
+            },
+            "warm": {
+              "min_age": "7d",
+              "actions": {
+                "shrink": { "number_of_shards": 1 },
+                "forcemerge": { "max_num_segments": 1 }
+              }
+            },
+            "delete": {
+              "min_age": "30d",
+              "actions": { "delete": {} }
+            }
+          }
+        }
+      }
+
+  logstash:
+    pipeline: |
+      input {
+        beats {
+          port => 5044
+        }
+      }
+
+      filter {
+        if [kubernetes] {
+          mutate {
+            add_field => {
+              "namespace" => "%{[kubernetes][namespace]}"
+              "pod" => "%{[kubernetes][pod][name]}"
+              "container" => "%{[kubernetes][container][name]}"
+            }
+          }
+        }
+
+        grok {
+          match => { "message" => "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:level} %{GREEDYDATA:log_message}" }
+        }
+
+        date {
+          match => [ "timestamp", "ISO8601" ]
+          target => "@timestamp"
+        }
+      }
+
+      output {
+        elasticsearch {
+          hosts => ["elasticsearch:9200"]
+          index => "logs-%{+YYYY.MM.dd}"
+          user => "elastic"
+          password => "${ELASTIC_PASSWORD}"
+        }
+      }
+
+loki:
+  installation: |
+    helm install loki grafana/loki-stack \
+      --set grafana.enabled=true \
+      --set promtail.enabled=true
+
+  promtail_config: |
+    server:
+      http_listen_port: 9080
+
+    positions:
+      filename: /tmp/positions.yaml
+
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+
+    scrape_configs:
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            target_label: app
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+        pipeline_stages:
+          - json:
+              expressions:
+                level: level
+                message: message
+          - labels:
+              level:
+
+  logql_queries:
+    error_rate: |
+      sum(rate({app="myapp"} |= "error" [5m])) by (namespace)
+
+    latency_percentile: |
+      quantile_over_time(0.99, {app="myapp"} | json | unwrap duration [5m])
+
+    top_errors: |
+      topk(10, sum by (error_type) (count_over_time({app="myapp"} | json | error_type != "" [1h])))
+
+fluent_bit:
+  kubernetes_config: |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: fluent-bit-config
+    data:
+      fluent-bit.conf: |
+        [SERVICE]
+            Flush         5
+            Daemon        Off
+            Log_Level     info
+            Parsers_File  parsers.conf
+
+        [INPUT]
+            Name              tail
+            Tag               kube.*
+            Path              /var/log/containers/*.log
+            Parser            docker
+            DB                /var/log/flb_kube.db
+            Mem_Buf_Limit     5MB
+            Skip_Long_Lines   On
+            Refresh_Interval  10
+
+        [FILTER]
+            Name                kubernetes
+            Match               kube.*
+            Merge_Log           On
+            Keep_Log            Off
+            K8S-Logging.Parser  On
+
+        [OUTPUT]
+            Name            es
+            Match           *
+            Host            elasticsearch
+            Port            9200
+            Logstash_Format On
+            Retry_Limit     False
+
+structured_logging:
+  json_format:
+    example: |
+      {
+        "timestamp": "2025-01-15T10:30:00Z",
+        "level": "INFO",
+        "service": "payment-service",
+        "trace_id": "abc123",
+        "span_id": "def456",
+        "message": "Payment processed",
+        "payment_id": "PAY-789",
+        "amount": 99.99,
+        "duration_ms": 150
+      }
+
+    fields:
+      required:
+        - timestamp
+        - level
+        - service
+        - message
+      recommended:
+        - trace_id
+        - span_id
+        - request_id
+      optional:
+        - user_id
+        - duration_ms
+        - error_type
+
+best_practices:
+  collection:
+    - "Use structured JSON logging"
+    - "Include correlation IDs"
+    - "Log at appropriate levels"
+    - "Avoid logging sensitive data"
+
+  storage:
+    - "Implement retention policies"
+    - "Use tiered storage (hot/warm/cold)"
+    - "Compress older logs"
+    - "Regular backup critical logs"
+
+  analysis:
+    - "Create dashboards for common patterns"
+    - "Set up alerts for error spikes"
+    - "Use sampling for high-volume logs"
+    - "Correlate logs with traces and metrics"

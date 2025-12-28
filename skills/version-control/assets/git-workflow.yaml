@@ -1,0 +1,106 @@
+# Git Workflow Strategies
+# Branching models and best practices
+
+branching_strategies:
+  gitflow:
+    description: "Feature-based branching with releases"
+    branches:
+      main: "Production-ready code"
+      develop: "Integration branch"
+      feature/*: "New features"
+      release/*: "Release preparation"
+      hotfix/*: "Production fixes"
+    workflow: |
+      1. Create feature branch from develop
+      2. Develop and test feature
+      3. Create PR to develop
+      4. Merge after review
+      5. Create release branch when ready
+      6. Merge to main and tag
+    best_for:
+      - Scheduled releases
+      - Large teams
+      - Complex projects
+
+  trunk_based:
+    description: "Continuous integration with short-lived branches"
+    branches:
+      main: "Always deployable"
+      feature/*: "Short-lived (< 1 day)"
+    workflow: |
+      1. Create small feature branch
+      2. Commit frequently
+      3. Merge same day
+      4. Feature flags for incomplete work
+    best_for:
+      - CI/CD environments
+      - Small teams
+      - Rapid deployment
+
+  github_flow:
+    description: "Simplified workflow for web apps"
+    branches:
+      main: "Always deployable"
+      feature/*: "All changes"
+    workflow: |
+      1. Branch from main
+      2. Commit changes
+      3. Open PR
+      4. Review and merge
+      5. Deploy immediately
+    best_for:
+      - Web applications
+      - Continuous deployment
+      - Small to medium teams
+
+commit_conventions:
+  conventional_commits:
+    format: "<type>(<scope>): <description>"
+    types:
+      feat: "New feature"
+      fix: "Bug fix"
+      docs: "Documentation"
+      style: "Formatting"
+      refactor: "Code restructuring"
+      test: "Tests"
+      chore: "Maintenance"
+    examples:
+      - "feat(auth): add OAuth2 login"
+      - "fix(api): handle null response"
+      - "docs(readme): update installation steps"
+
+pr_best_practices:
+  size: "< 400 lines of code"
+  description: "Clear context and testing notes"
+  reviewers: "2+ approvals recommended"
+  ci_checks: "All must pass before merge"
+
+  template: |
+    ## Summary
+    Brief description of changes
+
+    ## Type of Change
+    - [ ] Bug fix
+    - [ ] New feature
+    - [ ] Breaking change
+
+    ## Testing
+    - [ ] Unit tests added
+    - [ ] Integration tests pass
+    - [ ] Manual testing completed
+
+    ## Checklist
+    - [ ] Code follows style guidelines
+    - [ ] Documentation updated
+    - [ ] No security vulnerabilities
+
+git_hooks:
+  pre_commit:
+    - lint_check
+    - format_check
+    - secrets_scan
+  commit_msg:
+    - conventional_commit_format
+  pre_push:
+    - run_tests
+    - security_scan

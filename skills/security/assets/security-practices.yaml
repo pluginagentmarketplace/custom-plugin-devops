@@ -1,0 +1,204 @@
+# DevSecOps Security Practices
+# Secrets, certificates, and vulnerability management
+
+secrets_management:
+  hashicorp_vault:
+    installation: |
+      helm repo add hashicorp https://helm.releases.hashicorp.com
+      helm install vault hashicorp/vault
+
+    kv_secrets: |
+      # Enable KV secrets engine
+      vault secrets enable -path=secret kv-v2
+
+      # Store a secret
+      vault kv put secret/myapp/db username=admin password=secure123
+
+      # Read a secret
+      vault kv get secret/myapp/db
+
+    kubernetes_auth: |
+      # Enable Kubernetes auth
+      vault auth enable kubernetes
+
+      # Configure Kubernetes auth
+      vault write auth/kubernetes/config \
+        kubernetes_host="https://$KUBERNETES_HOST:443" \
+        token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+        kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+
+    policy: |
+      path "secret/data/myapp/*" {
+        capabilities = ["read"]
+      }
+
+      path "secret/metadata/myapp/*" {
+        capabilities = ["list"]
+      }
+
+  external_secrets:
+    operator: |
+      apiVersion: external-secrets.io/v1beta1
+      kind: SecretStore
+      metadata:
+        name: vault-backend
+      spec:
+        provider:
+          vault:
+            server: "https://vault.example.com"
+            path: "secret"
+            auth:
+              kubernetes:
+                mountPath: "kubernetes"
+                role: "myapp"
+
+    external_secret: |
+      apiVersion: external-secrets.io/v1beta1
+      kind: ExternalSecret
+      metadata:
+        name: myapp-secrets
+      spec:
+        refreshInterval: 1h
+        secretStoreRef:
+          name: vault-backend
+          kind: SecretStore
+        target:
+          name: myapp-secrets
+        data:
+          - secretKey: db-password
+            remoteRef:
+              key: myapp/database
+              property: password
+
+ssl_tls:
+  cert_manager:
+    installation: |
+      helm install cert-manager jetstack/cert-manager \
+        --namespace cert-manager \
+        --set installCRDs=true
+
+    lets_encrypt: |
+      apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      metadata:
+        name: letsencrypt-prod
+      spec:
+        acme:
+          server: https://acme-v02.api.letsencrypt.org/directory
+          email: admin@example.com
+          privateKeySecretRef:
+            name: letsencrypt-prod-key
+          solvers:
+            - http01:
+                ingress:
+                  class: nginx
+
+    certificate: |
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: myapp-tls
+      spec:
+        secretName: myapp-tls-secret
+        issuerRef:
+          name: letsencrypt-prod
+          kind: ClusterIssuer
+        dnsNames:
+          - myapp.example.com
+          - www.myapp.example.com
+
+vulnerability_scanning:
+  trivy:
+    image_scan: |
+      trivy image myapp:latest
+
+    filesystem_scan: |
+      trivy fs --security-checks vuln,secret,config .
+
+    kubernetes_scan: |
+      trivy k8s --report summary cluster
+
+  snyk:
+    container_scan: |
+      snyk container test myapp:latest
+
+    code_scan: |
+      snyk code test
+
+  grype:
+    sbom_scan: |
+      syft myapp:latest -o json | grype
+
+compliance:
+  opa_gatekeeper:
+    constraint_template: |
+      apiVersion: templates.gatekeeper.sh/v1
+      kind: ConstraintTemplate
+      metadata:
+        name: k8srequiredlabels
+      spec:
+        crd:
+          spec:
+            names:
+              kind: K8sRequiredLabels
+        targets:
+          - target: admission.k8s.gatekeeper.sh
+            rego: |
+              package k8srequiredlabels
+              violation[{"msg": msg}] {
+                provided := {label | input.review.object.metadata.labels[label]}
+                required := {label | label := input.parameters.labels[_]}
+                missing := required - provided
+                count(missing) > 0
+                msg := sprintf("Missing labels: %v", [missing])
+              }
+
+    constraint: |
+      apiVersion: constraints.gatekeeper.sh/v1beta1
+      kind: K8sRequiredLabels
+      metadata:
+        name: require-team-label
+      spec:
+        match:
+          kinds:
+            - apiGroups: [""]
+              kinds: ["Namespace"]
+        parameters:
+          labels: ["team", "environment"]
+
+ssh_hardening:
+  sshd_config: |
+    # Disable root login
+    PermitRootLogin no
+
+    # Use key authentication only
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+
+    # Use strong ciphers
+    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+
+    # Use strong MACs
+    MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+    # Limit login attempts
+    MaxAuthTries 3
+
+best_practices:
+  secrets:
+    - "Never store secrets in code or configs"
+    - "Rotate secrets regularly"
+    - "Use dynamic secrets when possible"
+    - "Audit secret access"
+
+  scanning:
+    - "Scan images before deployment"
+    - "Integrate scanning in CI/CD"
+    - "Block critical vulnerabilities"
+    - "Monitor for new CVEs"
+
+  access:
+    - "Principle of least privilege"
+    - "Use temporary credentials"
+    - "Enable MFA everywhere"
+    - "Regular access reviews"

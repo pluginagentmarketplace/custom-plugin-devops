@@ -1,0 +1,136 @@
+# Ansible Configuration Management Patterns
+# Production-ready playbook templates
+
+directory_structure:
+  layout: |
+    ansible/
+    ├── inventories/
+    │   ├── production/
+    │   │   ├── hosts
+    │   │   └── group_vars/
+    │   └── staging/
+    ├── roles/
+    │   └── common/
+    │       ├── tasks/
+    │       ├── handlers/
+    │       ├── templates/
+    │       ├── files/
+    │       └── defaults/
+    ├── playbooks/
+    │   ├── site.yml
+    │   └── webservers.yml
+    └── ansible.cfg
+
+playbook_patterns:
+  basic_webserver:
+    name: "Deploy Web Server"
+    content: |
+      ---
+      - name: Configure web servers
+        hosts: webservers
+        become: yes
+        vars:
+          http_port: 80
+
+        tasks:
+          - name: Install nginx
+            package:
+              name: nginx
+              state: present
+
+          - name: Configure nginx
+            template:
+              src: nginx.conf.j2
+              dest: /etc/nginx/nginx.conf
+            notify: restart nginx
+
+          - name: Start nginx
+            service:
+              name: nginx
+              state: started
+              enabled: yes
+
+        handlers:
+          - name: restart nginx
+            service:
+              name: nginx
+              state: restarted
+
+  role_based:
+    name: "Role-based playbook"
+    content: |
+      ---
+      - name: Configure infrastructure
+        hosts: all
+        become: yes
+        roles:
+          - common
+          - { role: nginx, when: "'webservers' in group_names" }
+          - { role: postgresql, when: "'databases' in group_names" }
+
+inventory_patterns:
+  static:
+    content: |
+      [webservers]
+      web1.example.com
+      web2.example.com
+
+      [databases]
+      db1.example.com
+
+      [all:vars]
+      ansible_user=deploy
+      ansible_ssh_private_key_file=~/.ssh/deploy_key
+
+  dynamic_aws:
+    plugin: aws_ec2
+    content: |
+      plugin: aws_ec2
+      regions:
+        - us-east-1
+      filters:
+        tag:Environment: production
+      keyed_groups:
+        - key: tags.Role
+          prefix: role
+
+best_practices:
+  idempotency:
+    - "Use state parameters (present, absent)"
+    - "Check mode support"
+    - "Handler-based restarts"
+
+  security:
+    - "Use ansible-vault for secrets"
+    - "Limit sudo scope"
+    - "SSH key authentication only"
+
+  performance:
+    - "Use async for long tasks"
+    - "Limit concurrent hosts with forks"
+    - "Use caching for facts"
+
+comparison:
+  ansible:
+    language: YAML
+    agent: agentless
+    push_pull: push
+    best_for: "Simple to medium complexity"
+
+  puppet:
+    language: Ruby DSL
+    agent: required
+    push_pull: pull
+    best_for: "Enterprise, complex configurations"
+
+  chef:
+    language: Ruby
+    agent: required
+    push_pull: pull
+    best_for: "Developer-friendly, complex logic"
+
+  salt:
+    language: YAML/Python
+    agent: optional
+    push_pull: both
+    best_for: "High performance, event-driven"

@@ -1,15 +1,12 @@
 {
   "name": "devops-automation-plugin",
-  "version": "2.0.0",
-  "description": "Comprehensive DevOps plugin with 7 specialized agents covering Linux, networking, containers, CI/CD, IaC, monitoring, and cloud infrastructure. Complete roadmap.sh/devops curriculum implementation.",
+  "version": "3.0.0",
+  "description": "Comprehensive DevOps plugin - 17 skills covering Linux, containers, CI/CD, IaC, monitoring, cloud, GitOps, and security",
   "author": {
     "name": "Dr. Umit Kacar & Muhsin Elcicek",
-    "email": "kacarumit.phd@gmail.com",
-    "url": "https://github.com/pluginagentmarketplace"
+    "email": "kacarumit.phd@gmail.com"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "repository": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
-  "homepage": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
   "keywords": [
     "devops",
     "linux",
@@ -26,7 +23,40 @@
     "aws",
     "azure",
     "gcp",
-    "infrastructure-as-code",
-    "automation"
-  ]
+    "gitops",
+    "argocd",
+    "security"
+  ],
+  "repository": {
+    "url": "https://github.com/pluginagentmarketplace/custom-plugin-devops"
+  },
+  "agents": [
+    "./agents/01-linux-fundamentals.md",
+    "./agents/02-networking-protocols.md",
+    "./agents/03-containers-orchestration.md",
+    "./agents/04-infrastructure-as-code.md",
+    "./agents/05-cicd-automation.md",
+    "./agents/06-monitoring-observability.md",
+    "./agents/07-cloud-infrastructure.md"
+  ],
+  "skills": [
+    "./skills/linux/SKILL.md",
+    "./skills/networking/SKILL.md",
+    "./skills/containers/SKILL.md",
+    "./skills/iac/SKILL.md",
+    "./skills/cicd/SKILL.md",
+    "./skills/monitoring/SKILL.md",
+    "./skills/cloud/SKILL.md",
+    "./skills/version-control/SKILL.md",
+    "./skills/configuration-management/SKILL.md",
+    "./skills/serverless/SKILL.md",
+    "./skills/gitops/SKILL.md",
+    "./skills/service-mesh/SKILL.md",
+    "./skills/security/SKILL.md",
+    "./skills/artifact-management/SKILL.md",
+    "./skills/logging/SKILL.md",
+    "./skills/scripting/SKILL.md",
+    "./skills/observability/SKILL.md"
+  ],
+  "hooks": "./hooks/hooks.json"
 }

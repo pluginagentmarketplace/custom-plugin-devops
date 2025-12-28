@@ -1,0 +1,168 @@
+# Service Mesh Configuration Patterns
+# Istio, Linkerd, and Consul templates
+
+comparison:
+  istio:
+    proxy: Envoy
+    complexity: High
+    features: Full-featured
+    performance: Good
+    best_for: "Enterprise, feature-rich needs"
+
+  linkerd:
+    proxy: linkerd2-proxy (Rust)
+    complexity: Low
+    features: Core mesh features
+    performance: Excellent
+    best_for: "Simplicity, performance"
+
+  consul:
+    proxy: Envoy
+    complexity: Medium
+    features: Multi-platform
+    performance: Good
+    best_for: "HashiCorp ecosystem, VMs"
+
+istio:
+  installation: |
+    istioctl install --set profile=production
+
+  virtual_service:
+    canary: |
+      apiVersion: networking.istio.io/v1beta1
+      kind: VirtualService
+      metadata:
+        name: myapp
+      spec:
+        hosts:
+          - myapp
+        http:
+          - match:
+              - headers:
+                  x-canary:
+                    exact: "true"
+            route:
+              - destination:
+                  host: myapp
+                  subset: v2
+          - route:
+              - destination:
+                  host: myapp
+                  subset: v1
+                weight: 90
+              - destination:
+                  host: myapp
+                  subset: v2
+                weight: 10
+
+    traffic_split: |
+      apiVersion: networking.istio.io/v1beta1
+      kind: VirtualService
+      metadata:
+        name: myapp
+      spec:
+        hosts:
+          - myapp.example.com
+        http:
+          - route:
+              - destination:
+                  host: myapp-v1
+                weight: 80
+              - destination:
+                  host: myapp-v2
+                weight: 20
+
+  destination_rule:
+    circuit_breaker: |
+      apiVersion: networking.istio.io/v1beta1
+      kind: DestinationRule
+      metadata:
+        name: myapp
+      spec:
+        host: myapp
+        trafficPolicy:
+          connectionPool:
+            tcp:
+              maxConnections: 100
+            http:
+              h2UpgradePolicy: UPGRADE
+              http1MaxPendingRequests: 100
+              http2MaxRequests: 1000
+          outlierDetection:
+            consecutive5xxErrors: 5
+            interval: 30s
+            baseEjectionTime: 30s
+            maxEjectionPercent: 50
+
+  peer_authentication:
+    strict_mtls: |
+      apiVersion: security.istio.io/v1beta1
+      kind: PeerAuthentication
+      metadata:
+        name: default
+        namespace: production
+      spec:
+        mtls:
+          mode: STRICT
+
+  authorization_policy:
+    deny_all: |
+      apiVersion: security.istio.io/v1beta1
+      kind: AuthorizationPolicy
+      metadata:
+        name: deny-all
+        namespace: production
+      spec: {}
+
+    allow_specific: |
+      apiVersion: security.istio.io/v1beta1
+      kind: AuthorizationPolicy
+      metadata:
+        name: allow-frontend
+      spec:
+        action: ALLOW
+        rules:
+          - from:
+              - source:
+                  principals: ["cluster.local/ns/default/sa/frontend"]
+            to:
+              - operation:
+                  methods: ["GET", "POST"]
+                  paths: ["/api/*"]
+
+linkerd:
+  installation: |
+    linkerd install | kubectl apply -f -
+    linkerd viz install | kubectl apply -f -
+
+  service_profile:
+    retries: |
+      apiVersion: linkerd.io/v1alpha2
+      kind: ServiceProfile
+      metadata:
+        name: myapp.production.svc.cluster.local
+        namespace: production
+      spec:
+        routes:
+          - name: GET /api/users
+            condition:
+              method: GET
+              pathRegex: /api/users
+            isRetryable: true
+            timeout: 500ms
+
+best_practices:
+  traffic_management:
+    - "Start with observability, add policies gradually"
+    - "Use canary deployments for safe rollouts"
+    - "Configure timeouts at all levels"
+
+  security:
+    - "Enable mTLS in STRICT mode"
+    - "Use AuthorizationPolicies for zero-trust"
+    - "Rotate certificates regularly"
+
+  performance:
+    - "Monitor sidecar resource usage"
+    - "Use appropriate connection pooling"
+    - "Consider ambient mesh for reduced overhead"

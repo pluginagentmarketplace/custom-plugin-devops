@@ -1,0 +1,185 @@
+# GitOps Patterns
+# ArgoCD and FluxCD configurations
+
+principles:
+  declarative:
+    description: "Infrastructure defined as code"
+    benefit: "Version controlled, auditable"
+
+  versioned:
+    description: "Git as single source of truth"
+    benefit: "History, rollback capability"
+
+  automated:
+    description: "Agents sync desired state"
+    benefit: "No manual kubectl apply"
+
+  audited:
+    description: "All changes through Git"
+    benefit: "Complete audit trail"
+
+argocd:
+  installation:
+    kubectl: |
+      kubectl create namespace argocd
+      kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+  application:
+    simple: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: myapp
+        namespace: argocd
+      spec:
+        project: default
+        source:
+          repoURL: https://github.com/org/repo.git
+          targetRevision: HEAD
+          path: manifests
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: production
+        syncPolicy:
+          automated:
+            prune: true
+            selfHeal: true
+
+    with_helm: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: myapp-helm
+        namespace: argocd
+      spec:
+        project: default
+        source:
+          repoURL: https://charts.example.com
+          chart: myapp
+          targetRevision: 1.2.3
+          helm:
+            values: |
+              replicas: 3
+              image:
+                tag: v2.0.0
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: production
+
+  applicationset:
+    multi_cluster: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: ApplicationSet
+      metadata:
+        name: cluster-apps
+        namespace: argocd
+      spec:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  env: production
+        template:
+          metadata:
+            name: '{{name}}-app'
+          spec:
+            project: default
+            source:
+              repoURL: https://github.com/org/repo.git
+              path: 'clusters/{{name}}'
+            destination:
+              server: '{{server}}'
+              namespace: app
+
+fluxcd:
+  installation: |
+    flux bootstrap github \
+      --owner=my-org \
+      --repository=fleet-infra \
+      --path=clusters/production \
+      --personal
+
+  kustomization: |
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: myapp
+      namespace: flux-system
+    spec:
+      interval: 5m
+      path: ./manifests
+      prune: true
+      sourceRef:
+        kind: GitRepository
+        name: myapp
+      healthChecks:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: myapp
+          namespace: production
+
+  image_automation: |
+    apiVersion: image.toolkit.fluxcd.io/v1beta1
+    kind: ImagePolicy
+    metadata:
+      name: myapp
+      namespace: flux-system
+    spec:
+      imageRepositoryRef:
+        name: myapp
+      policy:
+        semver:
+          range: '>=1.0.0'
+
+sync_strategies:
+  auto_sync:
+    description: "Automatically apply changes"
+    prune: true
+    self_heal: true
+
+  manual_sync:
+    description: "Require manual approval"
+    use_case: "Production environments"
+
+  sync_windows:
+    description: "Time-based sync restrictions"
+    example:
+      - "Allow Mon-Fri 9AM-5PM"
+      - "Deny weekends"
+
+progressive_delivery:
+  argo_rollouts:
+    canary: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      metadata:
+        name: myapp
+      spec:
+        replicas: 10
+        strategy:
+          canary:
+            steps:
+              - setWeight: 10
+              - pause: {duration: 5m}
+              - setWeight: 50
+              - pause: {duration: 10m}
+            trafficRouting:
+              istio:
+                virtualService:
+                  name: myapp-vsvc
+
+best_practices:
+  repository_structure:
+    - "Separate app and infra repos"
+    - "Environment-specific overlays"
+    - "Secrets managed with SOPS or Sealed Secrets"
+
+  security:
+    - "RBAC for ArgoCD projects"
+    - "GPG signed commits"
+    - "Network policies for ArgoCD"
+
+  monitoring:
+    - "ArgoCD metrics in Prometheus"
+    - "Alerts for sync failures"
+    - "Audit logs for changes"

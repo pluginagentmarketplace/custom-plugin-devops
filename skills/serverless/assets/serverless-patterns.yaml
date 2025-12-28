@@ -1,0 +1,165 @@
+# Serverless Computing Patterns
+# Function templates and best practices
+
+platforms:
+  aws_lambda:
+    max_memory: 10240MB
+    max_timeout: 15min
+    languages:
+      - Python
+      - Node.js
+      - Java
+      - Go
+      - .NET
+      - Ruby
+      - Custom (container)
+    triggers:
+      - API Gateway
+      - S3
+      - DynamoDB Streams
+      - SQS
+      - SNS
+      - EventBridge
+      - CloudWatch Events
+
+  azure_functions:
+    max_timeout: 10min (consumption)
+    languages:
+      - C#
+      - JavaScript
+      - Python
+      - Java
+      - PowerShell
+    triggers:
+      - HTTP
+      - Timer
+      - Blob Storage
+      - Queue
+      - Event Hub
+      - Cosmos DB
+
+  google_cloud_functions:
+    max_timeout: 9min (1st gen), 60min (2nd gen)
+    languages:
+      - Node.js
+      - Python
+      - Go
+      - Java
+      - .NET
+      - Ruby
+      - PHP
+    triggers:
+      - HTTP
+      - Pub/Sub
+      - Cloud Storage
+      - Firestore
+
+function_patterns:
+  api_handler:
+    description: "REST API endpoint"
+    template: |
+      import json
+
+      def handler(event, context):
+          body = json.loads(event.get('body', '{}'))
+
+          # Business logic here
+          result = process_request(body)
+
+          return {
+              'statusCode': 200,
+              'headers': {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*'
+              },
+              'body': json.dumps(result)
+          }
+
+  event_processor:
+    description: "Event-driven processing"
+    template: |
+      def handler(event, context):
+          for record in event['Records']:
+              # Process each record
+              process_record(record)
+
+          return {'processed': len(event['Records'])}
+
+  scheduled_task:
+    description: "Cron-like scheduled execution"
+    template: |
+      def handler(event, context):
+          # Run scheduled maintenance
+          cleanup_old_records()
+          generate_reports()
+
+          return {'status': 'completed'}
+
+cold_start_optimization:
+  strategies:
+    - name: "Provisioned Concurrency"
+      description: "Pre-warm instances"
+      cost: "Higher"
+      latency: "Minimal"
+
+    - name: "Keep-warm pings"
+      description: "Periodic invocations"
+      cost: "Low"
+      latency: "Reduced"
+
+    - name: "Smaller packages"
+      description: "Minimize dependencies"
+      cost: "None"
+      latency: "Reduced"
+
+    - name: "Connection pooling"
+      description: "Reuse connections"
+      cost: "None"
+      latency: "Reduced"
+
+  best_practices:
+    - "Initialize outside handler"
+    - "Use lazy loading"
+    - "Minimize package size"
+    - "Choose faster runtimes (Go, Rust)"
+
+cost_optimization:
+  strategies:
+    - "Right-size memory allocation"
+    - "Optimize execution duration"
+    - "Use ARM architecture (Graviton)"
+    - "Batch processing where possible"
+    - "Reserved concurrency for predictable load"
+
+  pricing_comparison:
+    aws_lambda:
+      free_tier: "1M requests, 400K GB-seconds"
+      per_request: "$0.20 per 1M requests"
+      per_duration: "$0.0000166667 per GB-second"
+
+    azure_functions:
+      free_tier: "1M executions, 400K GB-seconds"
+      per_execution: "$0.20 per 1M executions"
+      per_duration: "$0.000016 per GB-second"
+
+    gcp_functions:
+      free_tier: "2M invocations, 400K GB-seconds"
+      per_invocation: "$0.40 per 1M invocations"
+      per_duration: "$0.0000025 per GB-second"
+
+edge_computing:
+  cloudflare_workers:
+    runtime: V8 isolates
+    latency: "< 50ms globally"
+    use_cases:
+      - A/B testing
+      - Geolocation routing
+      - Response transformation
+      - Authentication
+
+  lambda_edge:
+    locations: CloudFront edge
+    use_cases:
+      - Header manipulation
+      - URL rewrites
+      - Authentication at edge

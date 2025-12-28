@@ -1,0 +1,158 @@
+# Artifact Management Configuration
+# Repository and registry patterns
+
+container_registries:
+  docker_hub:
+    login: |
+      docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+
+    push: |
+      docker tag myapp:latest username/myapp:v1.0.0
+      docker push username/myapp:v1.0.0
+
+  aws_ecr:
+    login: |
+      aws ecr get-login-password --region us-east-1 | \
+        docker login --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
+
+    create_repo: |
+      aws ecr create-repository --repository-name myapp
+
+    lifecycle_policy: |
+      {
+        "rules": [
+          {
+            "rulePriority": 1,
+            "description": "Keep last 10 images",
+            "selection": {
+              "tagStatus": "any",
+              "countType": "imageCountMoreThan",
+              "countNumber": 10
+            },
+            "action": {
+              "type": "expire"
+            }
+          }
+        ]
+      }
+
+  harbor:
+    features:
+      - "Vulnerability scanning"
+      - "Image signing"
+      - "RBAC"
+      - "Replication"
+    installation: |
+      helm install harbor harbor/harbor \
+        --set expose.type=ingress \
+        --set expose.ingress.hosts.core=harbor.example.com
+
+nexus:
+  docker_registry:
+    setup: |
+      # Create Docker hosted repository
+      # Configure HTTP connector on port 8082
+      # Enable Docker Bearer Token Realm
+
+    push: |
+      docker tag myapp:latest nexus.example.com:8082/myapp:v1.0.0
+      docker push nexus.example.com:8082/myapp:v1.0.0
+
+  npm_registry:
+    publish: |
+      npm config set registry https://nexus.example.com/repository/npm-hosted/
+      npm publish
+
+  maven_repository:
+    settings_xml: |
+      <servers>
+        <server>
+          <id>nexus</id>
+          <username>${env.NEXUS_USER}</username>
+          <password>${env.NEXUS_PASSWORD}</password>
+        </server>
+      </servers>
+      <mirrors>
+        <mirror>
+          <id>nexus</id>
+          <mirrorOf>*</mirrorOf>
+          <url>https://nexus.example.com/repository/maven-public/</url>
+        </mirror>
+      </mirrors>
+
+artifactory:
+  docker_registry:
+    login: |
+      docker login mycompany.jfrog.io
+
+    push: |
+      docker tag myapp:latest mycompany.jfrog.io/docker-local/myapp:v1.0.0
+      docker push mycompany.jfrog.io/docker-local/myapp:v1.0.0
+
+  promotion: |
+    # Promote artifact from staging to production
+    jf rt cp docker-staging/myapp/v1.0.0/ docker-prod/myapp/v1.0.0/
+
+helm_repository:
+  chartmuseum:
+    push: |
+      helm push mychart-0.1.0.tgz chartmuseum
+
+  oci_registry:
+    push: |
+      helm push mychart-0.1.0.tgz oci://registry.example.com/charts
+
+    pull: |
+      helm pull oci://registry.example.com/charts/mychart --version 0.1.0
+
+versioning_strategies:
+  semantic:
+    format: "MAJOR.MINOR.PATCH"
+    example: "1.2.3"
+    use_case: "Released versions"
+
+  build_number:
+    format: "VERSION-BUILD"
+    example: "1.2.3-456"
+    use_case: "CI builds"
+
+  git_sha:
+    format: "VERSION-SHA"
+    example: "1.2.3-abc123f"
+    use_case: "Traceability"
+
+  timestamp:
+    format: "VERSION-YYYYMMDD.HHMMSS"
+    example: "1.2.3-20250101.120000"
+    use_case: "Snapshots"
+
+cleanup_policies:
+  by_age:
+    description: "Delete artifacts older than X days"
+    nexus: |
+      # Cleanup policy for snapshots older than 30 days
+      { "criteriaLastBlobUpdated": 30 }
+
+  by_count:
+    description: "Keep only last N versions"
+    example: "Keep last 10 versions"
+
+  by_usage:
+    description: "Delete unused artifacts"
+    example: "Not downloaded in 90 days"
+
+best_practices:
+  organization:
+    - "Separate repos for snapshots and releases"
+    - "Use groups to aggregate repositories"
+    - "Implement naming conventions"
+
+  security:
+    - "Enable vulnerability scanning"
+    - "Sign artifacts with GPG/cosign"
+    - "Use RBAC for access control"
+
+  maintenance:
+    - "Configure cleanup policies"
+    - "Monitor storage usage"
+    - "Regular backup and recovery tests"
