@@ -1,226 +1,367 @@
-# Custom DevOps Roadmap Plugin
+<div align="center">
 
-> **Professional-Grade DevOps Learning Plugin** - Complete curriculum with 7 specialized agents
+# DevOps Automation Plugin
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](./plugin.yml)
-[![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen.svg)]()
-[![Agents](https://img.shields.io/badge/agents-7-blueviolet.svg)]()
-[![Skills](https://img.shields.io/badge/skills-48+-orange.svg)]()
+### Complete DevOps Learning System for Claude Code
 
-## Overview
+**Master DevOps with 7 specialized agents covering Linux, containers, CI/CD, IaC, monitoring, cloud, and security**
 
-A comprehensive **DevOps learning plugin** implementing the complete [roadmap.sh/devops](https://roadmap.sh/devops) curriculum through 7 specialized agents. Each agent covers a critical DevOps domain with 6-8 detailed skill modules.
+[![Verified](https://img.shields.io/badge/Verified-Working-success?style=flat-square&logo=checkmarx)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
+[![License](https://img.shields.io/badge/License-Custom-yellow?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-3.1.0-blue?style=flat-square)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
+[![Status](https://img.shields.io/badge/Status-Production_Ready-brightgreen?style=flat-square)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
+[![Agents](https://img.shields.io/badge/Agents-7-orange?style=flat-square)](#agents-overview)
+[![Skills](https://img.shields.io/badge/Skills-17-purple?style=flat-square)](#skills-reference)
+[![SASMP](https://img.shields.io/badge/SASMP-v1.3.0-blueviolet?style=flat-square)](#)
 
-Perfect for:
-- DevOps Engineers learning the full stack
-- Cloud Architects designing infrastructure
-- Platform Engineers building automation
-- Students entering DevOps field
-- Teams standardizing practices
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://linux.org)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io)
+[![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
 
-## Features
+[Quick Start](#quick-start) | [Agents](#agents-overview) | [Skills](#skills-reference) | [Learning Path](#learning-path)
 
-### Comprehensive
-- **48+ skill modules** covering 100% of roadmap.sh/devops
-- **500+ pages** of structured technical content
-- **200+ code examples** with real-world use cases
-- **100+ best practices** from industry experts
+</div>
 
-### Practical
-- Real-world scenarios and use cases
-- Hands-on exercises for each skill
-- Production-ready configurations
-- Tested implementations
+---
 
-### Progressive
-- Structured learning path from fundamentals to advanced
-- Clear skill dependencies and prerequisites
-- Estimated completion times
-- Difficulty level indicators
+## Verified Installation
 
-### Expert-Designed
-- Based on roadmap.sh/devops curriculum
-- Verified by DevOps professionals
-- Updated with latest tools and practices
-- Industry-standard methodologies
+> **This plugin has been tested and verified working on Claude Code.**
+> Last verified: December 2025
 
-## 7 Core Agents
+---
 
-| # | Agent | Focus | Skills | Level |
-|---|-------|-------|--------|-------|
-| 1 | **Linux & OS Fundamentals** | Operating Systems, Linux Administration | 8 | Beginner→Intermediate |
-| 2 | **Network & Protocols** | Networking, DNS, SSH, Firewalls | 6 | Intermediate |
-| 3 | **Container & Orchestration** | Docker, Kubernetes, Registries | 7 | Intermediate→Advanced |
-| 4 | **Infrastructure as Code** | Terraform, Ansible, CloudFormation | 6 | Intermediate→Advanced |
-| 5 | **CI/CD & Version Control** | Git, Jenkins, GitHub Actions, GitLab | 7 | Intermediate→Advanced |
-| 6 | **Monitoring & Logging** | Prometheus, Grafana, ELK, Datadog | 6 | Intermediate |
-| 7 | **Cloud & Advanced Topics** | AWS, Azure, GCP, Security, SRE | 8 | Advanced |
+## Quick Start
 
-## Installation
+### Option 1: Install from GitHub (Recommended)
+
+```bash
+# Step 1: Add the marketplace from GitHub
+/plugin add marketplace pluginagentmarketplace/custom-plugin-devops
+
+# Step 2: Install the plugin
+/plugin install devops-automation-plugin@pluginagentmarketplace-devops
+
+# Step 3: Restart Claude Code to load new plugins
+```
+
+### Option 2: Clone and Load Locally
 
 ```bash
 # Clone the repository
 git clone https://github.com/pluginagentmarketplace/custom-plugin-devops.git
 
-# Navigate to plugin directory
+# Navigate to the directory in Claude Code
 cd custom-plugin-devops
 
-# Install with Claude Code
-claude plugin install .
+# Load the plugin
+/plugin load .
 ```
 
-## Usage
+After loading, restart Claude Code.
 
-```bash
-# Ask an agent for help with specific skills
-@linux-os-agent: Guide me through process management in Linux
+### Verify Installation
 
-@container-orchestration-agent: How do I deploy an app to Kubernetes?
-
-@cicd-agent: Create a Jenkins pipeline for my project
-
-@monitoring-logging-agent: Set up Prometheus monitoring
-
-# Get overview of an agent
-@linux-os-agent: What skills are available?
-
-# Progressive learning
-@linux-os-agent: skill-01-process-management
-@linux-os-agent: skill-02-filesystem-storage
-@linux-os-agent: skill-03-file-permissions
-```
-
-## Learning Path
-
-### Recommended Progression
+After restarting Claude Code, verify the plugin is loaded. You should see these agents available:
 
 ```
-Start Here ↓
-┌─────────────────────────────────────────────┐
-│ 1. Linux & OS Fundamentals (4-6 weeks)     │
-│    Foundation for all DevOps work           │
-└──────────────────┬──────────────────────────┘
-                   ↓
-┌─────────────────────────────────────────────┐
-│ 2. Network & Protocols (3-4 weeks)         │
-│    Understanding system communication       │
-└──────────────────┬──────────────────────────┘
-                   ↓
-┌─────────────────────────────────────────────┐
-│ 3. Container & Orchestration (6-8 weeks)   │
-│    Containerize and scale applications      │
-└──────────────────┬──────────────────────────┘
-                   ↓
-        ┌──────────┴──────────┐
-        ↓                     ↓
-    Track A              Track B
-    ┌─────────┐          ┌─────────┐
-    │ IaC     │          │ CI/CD   │
-    │ (5-7w)  │          │ (5-6w)  │
-    └────┬────┘          └────┬────┘
-         └────────┬───────────┘
-                  ↓
-    ┌──────────────────────────┐
-    │ Monitoring & Logging     │
-    │ (4-5 weeks)              │
-    └────────┬─────────────────┘
-             ↓
-    ┌──────────────────────────┐
-    │ Cloud & Advanced Topics  │
-    │ (6-8 weeks)              │
-    └──────────────────────────┘
-             ↓
-         Master DevOps!
+custom-plugin-devops:01-linux-fundamentals
+custom-plugin-devops:02-networking-protocols
+custom-plugin-devops:03-containers-orchestration
+custom-plugin-devops:04-infrastructure-as-code
+custom-plugin-devops:05-cicd-automation
+custom-plugin-devops:06-monitoring-observability
+custom-plugin-devops:07-cloud-infrastructure
 ```
-
-**Total Time:** ~44 weeks intensive learning or ~6 months part-time
-
-## Directory Structure
-
-```
-custom-plugin-devops/
-│
-├── agents/                                    # 7 Agent implementations
-│   ├── linux-os-agent/
-│   │   ├── agent.yml                         # Configuration
-│   │   ├── README.md                         # Documentation
-│   │   └── skills/
-│   │       ├── skill-01-process-management.md
-│   │       ├── skill-02-filesystem-storage.md
-│   │       ├── skill-03-file-permissions.md
-│   │       ├── skill-04-package-management.md
-│   │       ├── skill-05-user-group-management.md
-│   │       ├── skill-06-bash-scripting.md
-│   │       ├── skill-07-system-monitoring.md
-│   │       └── skill-08-service-management.md
-│   │
-│   ├── network-protocol-agent/
-│   ├── container-orchestration-agent/
-│   ├── iac-agent/
-│   ├── cicd-agent/
-│   ├── monitoring-logging-agent/
-│   └── cloud-advanced-agent/
-│
-├── docs/                                      # Documentation
-│   ├── ARCHITECTURE.md                        # System design
-│   ├── QUICKSTART.md                          # Getting started
-│   ├── PLUGIN_STRUCTURE.md                    # Layout explanation
-│   ├── IMPLEMENTATION_GUIDE.md                # Usage guide
-│   └── BEST_PRACTICES.md                      # Tips & tricks
-│
-├── plugin.yml                                 # Plugin metadata
-├── main.md                                    # Detailed overview
-├── README.md                                  # This file
-└── CHANGELOG.md                               # Version history
-```
-
-## Testing
-
-```bash
-# Validate plugin structure
-/plugin validate .
-
-# Test specific agent
-@linux-os-agent: What are your capabilities?
-
-# Run through sample exercises
-# Follow hands-on exercises in each skill module
-```
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## Documentation
-
-- [main.md](./main.md) - Detailed overview
-- [QUICKSTART.md](./docs/QUICKSTART.md) - Getting started guide
-- [ARCHITECTURE.md](./docs/ARCHITECTURE.md) - System design
-- [PLUGIN_STRUCTURE.md](./docs/PLUGIN_STRUCTURE.md) - Directory layout
-- [IMPLEMENTATION_GUIDE.md](./docs/IMPLEMENTATION_GUIDE.md) - Usage patterns
-- [BEST_PRACTICES.md](./docs/BEST_PRACTICES.md) - Pro tips
-
-## Support
-
-- See documentation in `/docs`
-- Report issues on GitHub
-- Discussions welcome
-- Reference: https://roadmap.sh/devops
-
-## Acknowledgments
-
-Built based on [roadmap.sh/devops](https://roadmap.sh/devops) - the excellent DevOps learning roadmap.
-
-## License
-
-MIT License
 
 ---
 
-**License:** MIT
+## Available Skills
+
+Once installed, these 17 skills become available:
+
+| Skill | Invoke Command | Golden Format |
+|-------|----------------|---------------|
+| Linux | `Skill("custom-plugin-devops:linux")` | bashrc-template.sh, system-health-check.sh |
+| Networking | `Skill("custom-plugin-devops:networking")` | port-scanner.sh, PROTOCOLS.md |
+| Containers | `Skill("custom-plugin-devops:containers")` | docker-cleanup.sh, K8S-CHEATSHEET.md |
+| IaC | `Skill("custom-plugin-devops:iac")` | terraform-validate.sh, TERRAFORM-COMMANDS.md |
+| CI/CD | `Skill("custom-plugin-devops:cicd")` | github-actions-template.yml, GIT-WORKFLOW.md |
+| Monitoring | `Skill("custom-plugin-devops:monitoring")` | prometheus-config.yml, check-endpoints.sh |
+| Cloud | `Skill("custom-plugin-devops:cloud")` | aws-vpc-template.yaml, AWS-SERVICES.md |
+| Version Control | `Skill("custom-plugin-devops:version-control")` | git-workflow.yaml, git_cleanup.sh |
+| Configuration Mgmt | `Skill("custom-plugin-devops:configuration-management")` | ansible-patterns.yaml, validate_playbook.sh |
+| Serverless | `Skill("custom-plugin-devops:serverless")` | serverless-patterns.yaml, lambda_deploy.sh |
+| GitOps | `Skill("custom-plugin-devops:gitops")` | gitops-patterns.yaml, sync_check.sh |
+| Service Mesh | `Skill("custom-plugin-devops:service-mesh")` | service-mesh-config.yaml, istio_check.sh |
+| Security | `Skill("custom-plugin-devops:security")` | security-practices.yaml, security_scan.sh |
+| Artifact Mgmt | `Skill("custom-plugin-devops:artifact-management")` | artifact-config.yaml, artifact_cleanup.sh |
+| Logging | `Skill("custom-plugin-devops:logging")` | log_analyzer.sh |
+| Scripting | `Skill("custom-plugin-devops:scripting")` | scripting-patterns.yaml, script_template.sh |
+| Observability | `Skill("custom-plugin-devops:observability")` | observability-config.yaml, THREE_PILLARS.md |
+
+---
+
+## What This Plugin Does
+
+This plugin provides **7 specialized agents** and **17 production-ready skills** for DevOps mastery:
+
+| Agent | Purpose |
+|-------|---------|
+| **Linux Fundamentals** | Process management, filesystem, permissions, package management, bash scripting |
+| **Networking Protocols** | TCP/IP, DNS, SSH, firewalls, load balancing, VPNs |
+| **Containers & Orchestration** | Docker, Kubernetes, container security, Helm |
+| **Infrastructure as Code** | Terraform, Ansible, CloudFormation, Pulumi |
+| **CI/CD Automation** | Jenkins, GitHub Actions, GitLab CI, ArgoCD |
+| **Monitoring & Observability** | Prometheus, Grafana, ELK Stack, alerting |
+| **Cloud Infrastructure** | AWS, Azure, GCP, multi-cloud strategies |
+
+---
+
+## Agents Overview
+
+### 7 Implementation Agents
+
+Each agent is designed to **do the work**, not just explain:
+
+| Agent | Capabilities | Example Prompts |
+|-------|--------------|-----------------|
+| **Linux Fundamentals** | OS concepts, bash scripting, system administration | `"Write a backup script"`, `"Explain Linux permissions"` |
+| **Networking Protocols** | Network troubleshooting, firewall rules, DNS config | `"Configure iptables rules"`, `"Set up DNS records"` |
+| **Containers & Orchestration** | Docker builds, K8s deployments, Helm charts | `"Create Dockerfile"`, `"Deploy to Kubernetes"` |
+| **Infrastructure as Code** | Terraform modules, Ansible playbooks | `"Write Terraform for VPC"`, `"Create Ansible role"` |
+| **CI/CD Automation** | Pipeline design, GitHub Actions, Jenkins | `"Set up GitHub Actions"`, `"Create Jenkins pipeline"` |
+| **Monitoring & Observability** | Metrics, alerts, dashboards, logging | `"Configure Prometheus"`, `"Create Grafana dashboard"` |
+| **Cloud Infrastructure** | AWS/Azure/GCP resources, IAM, networking | `"Set up AWS VPC"`, `"Configure IAM roles"` |
+
+---
+
+## Skills Reference
+
+Each skill includes **Golden Format** content:
+- `assets/` - YAML templates, configuration files
+- `scripts/` - Shell/Python automation scripts
+- `references/` - Detailed methodology guides
+
+### Skills Deep Dive
+
+| Skill | Focus Areas | Real Assets |
+|-------|-------------|-------------|
+| **linux** | Process, filesystem, permissions | `bashrc-template.sh`, `COMMANDS.md` |
+| **networking** | TCP/IP, DNS, SSH, firewalls | `port-scanner.sh`, `PROTOCOLS.md` |
+| **containers** | Docker, Kubernetes, Helm | `docker-cleanup.sh`, `K8S-CHEATSHEET.md` |
+| **iac** | Terraform, Ansible, Pulumi | `terraform-validate.sh`, `TERRAFORM-COMMANDS.md` |
+| **cicd** | Jenkins, GitHub Actions, GitLab CI | `github-actions-template.yml`, `GIT-WORKFLOW.md` |
+| **monitoring** | Prometheus, Grafana, alerting | `prometheus-config.yml`, `check-endpoints.sh` |
+| **cloud** | AWS, Azure, GCP | `aws-vpc-template.yaml`, `AWS-SERVICES.md` |
+| **gitops** | ArgoCD, Flux, GitOps patterns | `gitops-patterns.yaml`, `sync_check.sh` |
+| **security** | DevSecOps, scanning, compliance | `security-practices.yaml`, `DEVSECOPS.md` |
+
+---
+
+## Usage Examples
+
+### Example 1: Docker Cleanup Script
+
+```bash
+# Before: Manual container cleanup
+docker ps -a | grep Exited | awk '{print $1}' | xargs docker rm
+docker images | grep "<none>" | awk '{print $3}' | xargs docker rmi
+
+# After (with Containers skill):
+Skill("custom-plugin-devops:containers")
+# Uses docker-cleanup.sh from assets - handles containers, images, volumes, networks
+./skills/containers/scripts/docker-cleanup.sh --all
+```
+
+### Example 2: Terraform Validation
+
+```bash
+# Before: Manual terraform checks
+terraform fmt
+terraform validate
+terraform plan
+
+# After (with IaC skill):
+Skill("custom-plugin-devops:iac")
+# Uses terraform-validate.sh - comprehensive validation
+./skills/iac/scripts/terraform-validate.sh
+# Checks: format, validation, plan, security scanning
+```
+
+### Example 3: Prometheus Configuration
+
+```yaml
+# Before: Manual prometheus.yml creation
+
+# After (with Monitoring skill):
+Skill("custom-plugin-devops:monitoring")
+# Uses prometheus-config.yml template from assets
+# Pre-configured with best practices:
+# - Job definitions for common exporters
+# - Alert rules for CPU, memory, disk
+# - Service discovery patterns
+```
+
+---
+
+## Learning Path
+
+```
+Start Here
+    |
+    v
+[ 1. Linux Fundamentals ] ---> [ 2. Networking ]
+                                      |
+                                      v
+                          [ 3. Containers & K8s ]
+                                      |
+              +---------------+-------+-------+
+              |               |               |
+              v               v               v
+        [ 4. IaC ]      [ 5. CI/CD ]    [ 6. Monitoring ]
+              |               |               |
+              +-------+-------+-------+-------+
+                      |
+                      v
+            [ 7. Cloud & Advanced ]
+                      |
+                      v
+              DevOps Master!
+```
+
+---
+
+## Plugin Structure
+
+```
+custom-plugin-devops/
+├── .claude-plugin/
+│   ├── plugin.json           # Plugin manifest
+│   └── marketplace.json      # Marketplace config
+├── agents/                   # 7 specialized agents
+│   ├── 01-linux-fundamentals.md
+│   ├── 02-networking-protocols.md
+│   ├── 03-containers-orchestration.md
+│   ├── 04-infrastructure-as-code.md
+│   ├── 05-cicd-automation.md
+│   ├── 06-monitoring-observability.md
+│   └── 07-cloud-infrastructure.md
+├── skills/                   # 17 skills (Golden Format)
+│   ├── linux/
+│   │   ├── SKILL.md
+│   │   ├── assets/bashrc-template.sh
+│   │   ├── scripts/system-health-check.sh
+│   │   └── references/COMMANDS.md
+│   ├── networking/
+│   ├── containers/
+│   ├── iac/
+│   ├── cicd/
+│   ├── monitoring/
+│   ├── cloud/
+│   ├── version-control/
+│   ├── configuration-management/
+│   ├── serverless/
+│   ├── gitops/
+│   ├── service-mesh/
+│   ├── security/
+│   ├── artifact-management/
+│   ├── logging/
+│   ├── scripting/
+│   └── observability/
+├── docs/                     # Additional documentation
+│   ├── INSTALLATION.md
+│   ├── USAGE.md
+│   └── TROUBLESHOOTING.md
+├── hooks/hooks.json
+├── README.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+└── LICENSE
+```
+
+---
+
+## Technology Coverage
+
+| Category | Technologies |
+|----------|--------------|
+| **Operating Systems** | Linux (Ubuntu, CentOS, RHEL), Windows Server |
+| **Containers** | Docker, Podman, containerd, Kubernetes, Helm |
+| **IaC** | Terraform, Ansible, CloudFormation, Pulumi |
+| **CI/CD** | Jenkins, GitHub Actions, GitLab CI, ArgoCD, Flux |
+| **Cloud** | AWS, Azure, GCP, DigitalOcean |
+| **Monitoring** | Prometheus, Grafana, ELK Stack, Datadog |
+| **Security** | HashiCorp Vault, SOPS, Trivy, SonarQube |
+
+---
+
+## Security Notice
+
+This plugin is designed for **authorized development and learning use only**:
+
+**USE FOR:**
+- Learning DevOps practices
+- Building automation scripts
+- Infrastructure provisioning
+- CI/CD pipeline development
+- Security best practices
+
+**NEVER:**
+- Store credentials in code
+- Skip security scanning
+- Ignore compliance requirements
+- Use in production without review
+
+---
+
+## Contributing
+
+Contributions are welcome:
+
+1. Fork the repository
+2. Create a feature branch
+3. Follow the Golden Format for new skills
+4. Submit a pull request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## Metadata
+
+| Field | Value |
+|-------|-------|
+| **Last Updated** | 2025-12-28 |
+| **Maintenance Status** | Active |
+| **SASMP Version** | 1.3.0 |
+| **Support** | [Issues](../../issues) |
+
+---
+
+## License
+
+Custom License - See [LICENSE](LICENSE) for details.
+
+---
+
+## Contributors
+
+**Authors:**
+- **Dr. Umit Kacar** - Senior AI Researcher & Engineer
+- **Muhsin Elcicek** - Senior Software Architect
+
+---
+
+<div align="center">
+
+**Master DevOps with AI assistance!**
+
+[![Made for DevOps](https://img.shields.io/badge/Made%20for-DevOps-blue?style=for-the-badge&logo=linux)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
+
+**Built by Dr. Umit Kacar & Muhsin Elcicek**
+
+*Based on [roadmap.sh/devops](https://roadmap.sh/devops)*
+
+</div>

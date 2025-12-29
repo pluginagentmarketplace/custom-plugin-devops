@@ -10,7 +10,7 @@
       "name": "devops-automation-plugin",
       "source": "./",
       "description": "Comprehensive DevOps plugin with 7 specialized agents for Linux, containers, CI/CD, IaC, monitoring, and cloud.",
-      "version": "2.0.0",
+      "version": "3.1.0",
       "keywords": ["devops", "linux", "docker", "kubernetes", "terraform", "cicd", "monitoring", "cloud"],
       "author": {
         "name": "Dr. Umit Kacar & Muhsin Elcicek",

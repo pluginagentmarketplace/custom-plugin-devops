@@ -1,6 +1,6 @@
 {
   "name": "devops-automation-plugin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Comprehensive DevOps plugin - 17 skills covering Linux, containers, CI/CD, IaC, monitoring, cloud, GitOps, and security",
   "author": {
     "name": "Dr. Umit Kacar & Muhsin Elcicek",
@@ -27,9 +27,8 @@
     "argocd",
     "security"
   ],
-  "repository": {
-    "url": "https://github.com/pluginagentmarketplace/custom-plugin-devops"
-  },
+  "repository": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
+  "homepage": "https://github.com/pluginagentmarketplace/custom-plugin-devops",
   "agents": [
     "./agents/01-linux-fundamentals.md",
     "./agents/02-networking-protocols.md",
