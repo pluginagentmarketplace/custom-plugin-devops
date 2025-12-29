@@ -1,0 +1,4 @@
+# Linux Configuration
+distributions: [ubuntu, centos, debian, alpine, rhel]
+services: [systemd, init, supervisor]
+package_managers: [apt, yum, dnf, apk]

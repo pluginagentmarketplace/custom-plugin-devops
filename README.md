@@ -1,367 +1,262 @@
 <div align="center">
 
-# DevOps Automation Plugin
+<!-- Animated Typing Banner -->
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=2E9EF7&center=true&vCenter=true&multiline=true&repeat=true&width=600&height=100&lines=Devops+Assistant;7+Agents+%7C+17+Skills;Claude+Code+Plugin" alt="Devops Assistant" />
 
-### Complete DevOps Learning System for Claude Code
+<br/>
 
-**Master DevOps with 7 specialized agents covering Linux, containers, CI/CD, IaC, monitoring, cloud, and security**
+<!-- Badge Row 1: Status Badges -->
+[![Version](https://img.shields.io/badge/Version-3.1.0-blue?style=for-the-badge)](https://github.com/pluginagentmarketplace/custom-plugin-devops/releases)
+[![License](https://img.shields.io/badge/License-Custom-yellow?style=for-the-badge)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=for-the-badge)](#)
+[![SASMP](https://img.shields.io/badge/SASMP-v1.3.0-blueviolet?style=for-the-badge)](#)
 
-[![Verified](https://img.shields.io/badge/Verified-Working-success?style=flat-square&logo=checkmarx)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
-[![License](https://img.shields.io/badge/License-Custom-yellow?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-3.1.0-blue?style=flat-square)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
-[![Status](https://img.shields.io/badge/Status-Production_Ready-brightgreen?style=flat-square)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
-[![Agents](https://img.shields.io/badge/Agents-7-orange?style=flat-square)](#agents-overview)
-[![Skills](https://img.shields.io/badge/Skills-17-purple?style=flat-square)](#skills-reference)
-[![SASMP](https://img.shields.io/badge/SASMP-v1.3.0-blueviolet?style=flat-square)](#)
+<!-- Badge Row 2: Content Badges -->
+[![Agents](https://img.shields.io/badge/Agents-7-orange?style=flat-square&logo=robot)](#-agents)
+[![Skills](https://img.shields.io/badge/Skills-17-purple?style=flat-square&logo=lightning)](#-skills)
+[![Commands](https://img.shields.io/badge/Commands-0-green?style=flat-square&logo=terminal)](#-commands)
 
-[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://linux.org)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io)
-[![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
+<br/>
 
-[Quick Start](#quick-start) | [Agents](#agents-overview) | [Skills](#skills-reference) | [Learning Path](#learning-path)
+<!-- Quick CTA Row -->
+[📦 **Install Now**](#-quick-start) · [🤖 **Explore Agents**](#-agents) · [📖 **Documentation**](#-documentation) · [⭐ **Star this repo**](https://github.com/pluginagentmarketplace/custom-plugin-devops)
+
+---
+
+### What is this?
+
+> **Devops Assistant** is a Claude Code plugin with **7 agents** and **17 skills** for devops development.
 
 </div>
 
 ---
 
-## Verified Installation
+## 📑 Table of Contents
 
-> **This plugin has been tested and verified working on Claude Code.**
-> Last verified: December 2025
+<details>
+<summary>Click to expand</summary>
+
+- [Quick Start](#-quick-start)
+- [Features](#-features)
+- [Agents](#-agents)
+- [Skills](#-skills)
+- [Commands](#-commands)
+- [Documentation](#-documentation)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+</details>
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
-### Option 1: Install from GitHub (Recommended)
+### Prerequisites
+
+- Claude Code CLI v2.0.27+
+- Active Claude subscription
+
+### Installation (Choose One)
+
+<details open>
+<summary><strong>Option 1: From Marketplace (Recommended)</strong></summary>
 
 ```bash
-# Step 1: Add the marketplace from GitHub
+# Step 1️⃣ Add the marketplace
 /plugin add marketplace pluginagentmarketplace/custom-plugin-devops
 
-# Step 2: Install the plugin
+# Step 2️⃣ Install the plugin
 /plugin install devops-automation-plugin@pluginagentmarketplace-devops
 
-# Step 3: Restart Claude Code to load new plugins
+# Step 3️⃣ Restart Claude Code
+# Close and reopen your terminal/IDE
 ```
 
-### Option 2: Clone and Load Locally
+</details>
+
+<details>
+<summary><strong>Option 2: Local Installation</strong></summary>
 
 ```bash
 # Clone the repository
 git clone https://github.com/pluginagentmarketplace/custom-plugin-devops.git
-
-# Navigate to the directory in Claude Code
 cd custom-plugin-devops
 
-# Load the plugin
+# Load locally
 /plugin load .
+
+# Restart Claude Code
 ```
 
-After loading, restart Claude Code.
+</details>
 
-### Verify Installation
+### ✅ Verify Installation
 
-After restarting Claude Code, verify the plugin is loaded. You should see these agents available:
+After restart, you should see these agents:
 
 ```
-custom-plugin-devops:01-linux-fundamentals
-custom-plugin-devops:02-networking-protocols
-custom-plugin-devops:03-containers-orchestration
-custom-plugin-devops:04-infrastructure-as-code
-custom-plugin-devops:05-cicd-automation
-custom-plugin-devops:06-monitoring-observability
-custom-plugin-devops:07-cloud-infrastructure
-```
-
----
-
-## Available Skills
-
-Once installed, these 17 skills become available:
-
-| Skill | Invoke Command | Golden Format |
-|-------|----------------|---------------|
-| Linux | `Skill("custom-plugin-devops:linux")` | bashrc-template.sh, system-health-check.sh |
-| Networking | `Skill("custom-plugin-devops:networking")` | port-scanner.sh, PROTOCOLS.md |
-| Containers | `Skill("custom-plugin-devops:containers")` | docker-cleanup.sh, K8S-CHEATSHEET.md |
-| IaC | `Skill("custom-plugin-devops:iac")` | terraform-validate.sh, TERRAFORM-COMMANDS.md |
-| CI/CD | `Skill("custom-plugin-devops:cicd")` | github-actions-template.yml, GIT-WORKFLOW.md |
-| Monitoring | `Skill("custom-plugin-devops:monitoring")` | prometheus-config.yml, check-endpoints.sh |
-| Cloud | `Skill("custom-plugin-devops:cloud")` | aws-vpc-template.yaml, AWS-SERVICES.md |
-| Version Control | `Skill("custom-plugin-devops:version-control")` | git-workflow.yaml, git_cleanup.sh |
-| Configuration Mgmt | `Skill("custom-plugin-devops:configuration-management")` | ansible-patterns.yaml, validate_playbook.sh |
-| Serverless | `Skill("custom-plugin-devops:serverless")` | serverless-patterns.yaml, lambda_deploy.sh |
-| GitOps | `Skill("custom-plugin-devops:gitops")` | gitops-patterns.yaml, sync_check.sh |
-| Service Mesh | `Skill("custom-plugin-devops:service-mesh")` | service-mesh-config.yaml, istio_check.sh |
-| Security | `Skill("custom-plugin-devops:security")` | security-practices.yaml, security_scan.sh |
-| Artifact Mgmt | `Skill("custom-plugin-devops:artifact-management")` | artifact-config.yaml, artifact_cleanup.sh |
-| Logging | `Skill("custom-plugin-devops:logging")` | log_analyzer.sh |
-| Scripting | `Skill("custom-plugin-devops:scripting")` | scripting-patterns.yaml, script_template.sh |
-| Observability | `Skill("custom-plugin-devops:observability")` | observability-config.yaml, THREE_PILLARS.md |
-
----
-
-## What This Plugin Does
-
-This plugin provides **7 specialized agents** and **17 production-ready skills** for DevOps mastery:
-
-| Agent | Purpose |
-|-------|---------|
-| **Linux Fundamentals** | Process management, filesystem, permissions, package management, bash scripting |
-| **Networking Protocols** | TCP/IP, DNS, SSH, firewalls, load balancing, VPNs |
-| **Containers & Orchestration** | Docker, Kubernetes, container security, Helm |
-| **Infrastructure as Code** | Terraform, Ansible, CloudFormation, Pulumi |
-| **CI/CD Automation** | Jenkins, GitHub Actions, GitLab CI, ArgoCD |
-| **Monitoring & Observability** | Prometheus, Grafana, ELK Stack, alerting |
-| **Cloud Infrastructure** | AWS, Azure, GCP, multi-cloud strategies |
-
----
-
-## Agents Overview
-
-### 7 Implementation Agents
-
-Each agent is designed to **do the work**, not just explain:
-
-| Agent | Capabilities | Example Prompts |
-|-------|--------------|-----------------|
-| **Linux Fundamentals** | OS concepts, bash scripting, system administration | `"Write a backup script"`, `"Explain Linux permissions"` |
-| **Networking Protocols** | Network troubleshooting, firewall rules, DNS config | `"Configure iptables rules"`, `"Set up DNS records"` |
-| **Containers & Orchestration** | Docker builds, K8s deployments, Helm charts | `"Create Dockerfile"`, `"Deploy to Kubernetes"` |
-| **Infrastructure as Code** | Terraform modules, Ansible playbooks | `"Write Terraform for VPC"`, `"Create Ansible role"` |
-| **CI/CD Automation** | Pipeline design, GitHub Actions, Jenkins | `"Set up GitHub Actions"`, `"Create Jenkins pipeline"` |
-| **Monitoring & Observability** | Metrics, alerts, dashboards, logging | `"Configure Prometheus"`, `"Create Grafana dashboard"` |
-| **Cloud Infrastructure** | AWS/Azure/GCP resources, IAM, networking | `"Set up AWS VPC"`, `"Configure IAM roles"` |
-
----
-
-## Skills Reference
-
-Each skill includes **Golden Format** content:
-- `assets/` - YAML templates, configuration files
-- `scripts/` - Shell/Python automation scripts
-- `references/` - Detailed methodology guides
-
-### Skills Deep Dive
-
-| Skill | Focus Areas | Real Assets |
-|-------|-------------|-------------|
-| **linux** | Process, filesystem, permissions | `bashrc-template.sh`, `COMMANDS.md` |
-| **networking** | TCP/IP, DNS, SSH, firewalls | `port-scanner.sh`, `PROTOCOLS.md` |
-| **containers** | Docker, Kubernetes, Helm | `docker-cleanup.sh`, `K8S-CHEATSHEET.md` |
-| **iac** | Terraform, Ansible, Pulumi | `terraform-validate.sh`, `TERRAFORM-COMMANDS.md` |
-| **cicd** | Jenkins, GitHub Actions, GitLab CI | `github-actions-template.yml`, `GIT-WORKFLOW.md` |
-| **monitoring** | Prometheus, Grafana, alerting | `prometheus-config.yml`, `check-endpoints.sh` |
-| **cloud** | AWS, Azure, GCP | `aws-vpc-template.yaml`, `AWS-SERVICES.md` |
-| **gitops** | ArgoCD, Flux, GitOps patterns | `gitops-patterns.yaml`, `sync_check.sh` |
-| **security** | DevSecOps, scanning, compliance | `security-practices.yaml`, `DEVSECOPS.md` |
-
----
-
-## Usage Examples
-
-### Example 1: Docker Cleanup Script
-
-```bash
-# Before: Manual container cleanup
-docker ps -a | grep Exited | awk '{print $1}' | xargs docker rm
-docker images | grep "<none>" | awk '{print $3}' | xargs docker rmi
-
-# After (with Containers skill):
-Skill("custom-plugin-devops:containers")
-# Uses docker-cleanup.sh from assets - handles containers, images, volumes, networks
-./skills/containers/scripts/docker-cleanup.sh --all
-```
-
-### Example 2: Terraform Validation
-
-```bash
-# Before: Manual terraform checks
-terraform fmt
-terraform validate
-terraform plan
-
-# After (with IaC skill):
-Skill("custom-plugin-devops:iac")
-# Uses terraform-validate.sh - comprehensive validation
-./skills/iac/scripts/terraform-validate.sh
-# Checks: format, validation, plan, security scanning
-```
-
-### Example 3: Prometheus Configuration
-
-```yaml
-# Before: Manual prometheus.yml creation
-
-# After (with Monitoring skill):
-Skill("custom-plugin-devops:monitoring")
-# Uses prometheus-config.yml template from assets
-# Pre-configured with best practices:
-# - Job definitions for common exporters
-# - Alert rules for CPU, memory, disk
-# - Service discovery patterns
+devops-automation-plugin:06-monitoring-observability
+devops-automation-plugin:02-networking-protocols
+devops-automation-plugin:04-infrastructure-as-code
+devops-automation-plugin:07-cloud-infrastructure
+devops-automation-plugin:01-linux-fundamentals
+... and 2 more
 ```
 
 ---
 
-## Learning Path
+## ✨ Features
 
-```
-Start Here
-    |
-    v
-[ 1. Linux Fundamentals ] ---> [ 2. Networking ]
-                                      |
-                                      v
-                          [ 3. Containers & K8s ]
-                                      |
-              +---------------+-------+-------+
-              |               |               |
-              v               v               v
-        [ 4. IaC ]      [ 5. CI/CD ]    [ 6. Monitoring ]
-              |               |               |
-              +-------+-------+-------+-------+
-                      |
-                      v
-            [ 7. Cloud & Advanced ]
-                      |
-                      v
-              DevOps Master!
-```
+| Feature | Description |
+|---------|-------------|
+| 🤖 **7 Agents** | Specialized AI agents for devops tasks |
+| 🛠️ **17 Skills** | Reusable capabilities with Golden Format |
+| ⌨️ **0 Commands** | Quick slash commands |
+| 🔄 **SASMP v1.3.0** | Full protocol compliance |
 
 ---
 
-## Plugin Structure
+## 🤖 Agents
+
+### 7 Specialized Agents
+
+| # | Agent | Purpose |
+|---|-------|---------|
+| 1 | **06-monitoring-observability** | Master monitoring and observability with Prometheus, Grafana |
+| 2 | **02-networking-protocols** | Master networking fundamentals including TCP/IP, DNS, HTTP/H |
+| 3 | **04-infrastructure-as-code** | Master Infrastructure as Code with Terraform, Ansible, and C |
+| 4 | **07-cloud-infrastructure** | Master cloud platforms including AWS, Azure, and GCP. Learn  |
+| 5 | **01-linux-fundamentals** | Master Linux OS fundamentals including process management, f |
+| 6 | **05-cicd-automation** | Master CI/CD pipelines with Git, GitHub Actions, GitLab CI,  |
+| 7 | **03-containers-orchestration** | Master containerization with Docker and orchestration with K |
+
+---
+
+## 🛠️ Skills
+
+### Available Skills
+
+| Skill | Description | Invoke |
+|-------|-------------|--------|
+| `scripting` | DevOps scripting with Bash, Python, and Go for automation, t | `Skill("devops-automation-plugin:scripting")` |
+| `artifact-management` | Artifact repositories with Nexus, Artifactory, and container | `Skill("devops-automation-plugin:artifact-management")` |
+| `configuration-management` | Infrastructure configuration with Ansible, Chef, Puppet, and | `Skill("devops-automation-plugin:configuration-management")` |
+| `security` | DevSecOps practices including secrets management, SSL/TLS, v | `Skill("devops-automation-plugin:security")` |
+| `serverless` | Serverless computing with AWS Lambda, Azure Functions, Googl | `Skill("devops-automation-plugin:serverless")` |
+| `networking` | Network protocols and troubleshooting - TCP/IP, DNS, HTTP/HT | `Skill("devops-automation-plugin:networking")` |
+| `version-control` | Git version control, branching strategies, GitHub/GitLab wor | `Skill("devops-automation-plugin:version-control")` |
+| `observability` | Distributed tracing with Jaeger, OpenTelemetry, and observab | `Skill("devops-automation-plugin:observability")` |
+| `cicd` | CI/CD pipelines with Git, GitHub Actions, GitLab CI, Jenkins | `Skill("devops-automation-plugin:cicd")` |
+| `iac` | Infrastructure as Code with Terraform, Ansible, and CloudFor | `Skill("devops-automation-plugin:iac")` |
+| ... | +7 more | See skills/ directory |
+
+---
+
+## ⌨️ Commands
+
+| Command | Description |
+|---------|-------------|
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute |
+| [LICENSE](LICENSE) | License information |
+
+---
+
+## 📁 Project Structure
+
+<details>
+<summary>Click to expand</summary>
 
 ```
 custom-plugin-devops/
-├── .claude-plugin/
-│   ├── plugin.json           # Plugin manifest
-│   └── marketplace.json      # Marketplace config
-├── agents/                   # 7 specialized agents
-│   ├── 01-linux-fundamentals.md
-│   ├── 02-networking-protocols.md
-│   ├── 03-containers-orchestration.md
-│   ├── 04-infrastructure-as-code.md
-│   ├── 05-cicd-automation.md
-│   ├── 06-monitoring-observability.md
-│   └── 07-cloud-infrastructure.md
-├── skills/                   # 17 skills (Golden Format)
-│   ├── linux/
-│   │   ├── SKILL.md
-│   │   ├── assets/bashrc-template.sh
-│   │   ├── scripts/system-health-check.sh
-│   │   └── references/COMMANDS.md
-│   ├── networking/
-│   ├── containers/
-│   ├── iac/
-│   ├── cicd/
-│   ├── monitoring/
-│   ├── cloud/
-│   ├── version-control/
-│   ├── configuration-management/
-│   ├── serverless/
-│   ├── gitops/
-│   ├── service-mesh/
-│   ├── security/
-│   ├── artifact-management/
-│   ├── logging/
-│   ├── scripting/
-│   └── observability/
-├── docs/                     # Additional documentation
-│   ├── INSTALLATION.md
-│   ├── USAGE.md
-│   └── TROUBLESHOOTING.md
-├── hooks/hooks.json
-├── README.md
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-└── LICENSE
+├── 📁 .claude-plugin/
+│   ├── plugin.json
+│   └── marketplace.json
+├── 📁 agents/              # 7 agents
+├── 📁 skills/              # 17 skills (Golden Format)
+├── 📁 commands/            # 0 commands
+├── 📁 hooks/
+├── 📄 README.md
+├── 📄 CHANGELOG.md
+└── 📄 LICENSE
 ```
 
----
-
-## Technology Coverage
-
-| Category | Technologies |
-|----------|--------------|
-| **Operating Systems** | Linux (Ubuntu, CentOS, RHEL), Windows Server |
-| **Containers** | Docker, Podman, containerd, Kubernetes, Helm |
-| **IaC** | Terraform, Ansible, CloudFormation, Pulumi |
-| **CI/CD** | Jenkins, GitHub Actions, GitLab CI, ArgoCD, Flux |
-| **Cloud** | AWS, Azure, GCP, DigitalOcean |
-| **Monitoring** | Prometheus, Grafana, ELK Stack, Datadog |
-| **Security** | HashiCorp Vault, SOPS, Trivy, SonarQube |
+</details>
 
 ---
 
-## Security Notice
-
-This plugin is designed for **authorized development and learning use only**:
-
-**USE FOR:**
-- Learning DevOps practices
-- Building automation scripts
-- Infrastructure provisioning
-- CI/CD pipeline development
-- Security best practices
-
-**NEVER:**
-- Store credentials in code
-- Skip security scanning
-- Ignore compliance requirements
-- Use in production without review
-
----
-
-## Contributing
-
-Contributions are welcome:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow the Golden Format for new skills
-4. Submit a pull request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
----
-
-## Metadata
+## 📅 Metadata
 
 | Field | Value |
 |-------|-------|
-| **Last Updated** | 2025-12-28 |
-| **Maintenance Status** | Active |
-| **SASMP Version** | 1.3.0 |
-| **Support** | [Issues](../../issues) |
+| **Version** | 3.1.0 |
+| **Last Updated** | 2025-12-29 |
+| **Status** | Production Ready |
+| **SASMP** | v1.3.0 |
+| **Agents** | 7 |
+| **Skills** | 17 |
+| **Commands** | 0 |
 
 ---
 
-## License
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
+
+1. Fork the repository
+2. Create your feature branch
+3. Follow the Golden Format for new skills
+4. Submit a pull request
+
+---
+
+## ⚠️ Security
+
+> **Important:** This repository contains third-party code and dependencies.
+>
+> - ✅ Always review code before using in production
+> - ✅ Check dependencies for known vulnerabilities
+> - ✅ Follow security best practices
+> - ✅ Report security issues privately via [Issues](../../issues)
+
+---
+
+## 📝 License
+
+Copyright © 2025 **Dr. Umit Kacar** & **Muhsin Elcicek**
 
 Custom License - See [LICENSE](LICENSE) for details.
 
 ---
 
-## Contributors
+## 👥 Contributors
 
-**Authors:**
-- **Dr. Umit Kacar** - Senior AI Researcher & Engineer
-- **Muhsin Elcicek** - Senior Software Architect
+<table>
+<tr>
+<td align="center">
+<strong>Dr. Umit Kacar</strong><br/>
+Senior AI Researcher & Engineer
+</td>
+<td align="center">
+<strong>Muhsin Elcicek</strong><br/>
+Senior Software Architect
+</td>
+</tr>
+</table>
 
 ---
 
 <div align="center">
 
-**Master DevOps with AI assistance!**
+**Made with ❤️ for the Claude Code Community**
 
-[![Made for DevOps](https://img.shields.io/badge/Made%20for-DevOps-blue?style=for-the-badge&logo=linux)](https://github.com/pluginagentmarketplace/custom-plugin-devops)
-
-**Built by Dr. Umit Kacar & Muhsin Elcicek**
-
-*Based on [roadmap.sh/devops](https://roadmap.sh/devops)*
+[![GitHub](https://img.shields.io/badge/GitHub-pluginagentmarketplace-black?style=for-the-badge&logo=github)](https://github.com/pluginagentmarketplace)
 
 </div>

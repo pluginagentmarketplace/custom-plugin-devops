@@ -1,52 +1,89 @@
-# Contributing to DevOps Automation Plugin
+# Contributing to Devops Plugin
 
-Thank you for your interest in contributing!
+Thank you for your interest in contributing to this Claude Code plugin!
 
-## Getting Started
+## 📋 How to Contribute
 
-1. Fork the repository
-2. Clone your fork
-3. Create a feature branch: `git checkout -b feature/your-feature`
-4. Make your changes
-5. Test locally
-6. Commit: `git commit -m "feat: your feature description"`
-7. Push: `git push origin feature/your-feature`
-8. Open a Pull Request
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/amazing-feature`)
+3. **Follow** the Golden Format for new skills
+4. **Test** your changes thoroughly
+5. **Commit** your changes (`git commit -m 'feat: Add amazing feature'`)
+6. **Push** to the branch (`git push origin feature/amazing-feature`)
+7. **Open** a Pull Request
 
-## Commit Message Format
+## 📐 Guidelines
 
-We use Conventional Commits:
+### SASMP v1.3.0 Compliance
 
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code formatting
-- `refactor:` Code refactoring
-- `test:` Test changes
-- `chore:` Build/tooling changes
+All contributions must follow SASMP (Standardized Agent/Skill Metadata Protocol) v1.3.0:
 
-## Code Standards
+- Agents must include `sasmp_version: "1.3.0"` and `eqhm_enabled: true`
+- Skills must include `bonded_agent` and `bond_type` fields
+- Commands must have YAML frontmatter
 
-- Follow SASMP v1.3.0 for agents and skills
-- Use Golden Format for skills (assets/scripts/references)
-- Include YAML frontmatter in all .md files
-- Test changes before submitting PR
+### Agent Development
 
-## Agent Guidelines
+```yaml
+---
+name: agent-name
+description: Agent description
+model: sonnet
+tools: Read, Write, Bash
+sasmp_version: "1.3.0"
+eqhm_enabled: true
+---
+```
 
-All agents must include:
-- `sasmp_version: "1.3.0"`
-- `eqhm_enabled: true`
-- Proper `tools` declaration
-- Clear `description`
+### Skill Development (Golden Format)
 
-## Skill Guidelines
+```
+skills/skill-name/
+├── SKILL.md          # Main skill definition
+├── assets/           # Templates, configs, schemas
+├── scripts/          # Automation scripts
+└── references/       # Documentation, guides
+```
 
-All skills must include:
-- `bonded_agent` field
-- `bond_type: PRIMARY_BOND` or `SECONDARY_BOND`
-- Golden Format directories with real content
+SKILL.md frontmatter:
+```yaml
+---
+name: skill-name
+description: Skill description
+sasmp_version: "1.3.0"
+bonded_agent: agent-name
+bond_type: PRIMARY_BOND
+---
+```
 
-## Questions?
+### Command Development
 
-Open an issue or contact: plugins@pluginagentmarketplace.com
+```yaml
+---
+name: command-name
+description: Command description
+allowed-tools: Read, Glob
+---
+```
+
+## ✅ Testing Requirements
+
+- Test all new features locally
+- Verify agent/skill bonding
+- Run `/plugin validate` before submitting
+- Ensure no E-code errors
+
+## 🔒 Code of Conduct
+
+- Be respectful and constructive
+- Follow existing code style
+- Document your changes
+- Test before submitting
+
+## ❓ Questions?
+
+Open an issue for any questions or suggestions.
+
+---
+
+© 2025 Dr. Umit Kacar & Muhsin Elcicek. All Rights Reserved.

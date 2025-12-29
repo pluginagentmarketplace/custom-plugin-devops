@@ -57,5 +57,8 @@
     "./skills/scripting/SKILL.md",
     "./skills/observability/SKILL.md"
   ],
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "commands": [
+    "./commands/explore-devops.md"
+  ]
 }

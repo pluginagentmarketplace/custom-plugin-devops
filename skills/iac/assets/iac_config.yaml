@@ -1,0 +1,4 @@
+# Infrastructure as Code
+tools: [terraform, pulumi, cloudformation, cdk]
+providers: [aws, gcp, azure, kubernetes]
+patterns: [modules, workspaces, state_management]

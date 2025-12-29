@@ -1,0 +1,4 @@
+# Monitoring Configuration
+tools: [prometheus, grafana, datadog, new_relic]
+metrics: [cpu, memory, disk, network, custom]
+alerting: [pagerduty, opsgenie, slack, email]

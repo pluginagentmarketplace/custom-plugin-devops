@@ -1,0 +1,4 @@
+# CI/CD Configuration
+pipelines: [github_actions, gitlab_ci, jenkins, circleci, azure_devops]
+stages: [build, test, deploy, release]
+practices: [trunk_based, feature_branches, gitflow]

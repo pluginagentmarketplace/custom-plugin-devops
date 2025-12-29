@@ -1,0 +1,4 @@
+# Networking Configuration
+layers: [L2_ethernet, L3_ip, L4_tcp_udp, L7_http]
+services: [dns, dhcp, nat, vpn, load_balancer]
+tools: [tcpdump, wireshark, netcat, iptables, nftables]

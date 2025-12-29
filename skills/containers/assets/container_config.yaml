@@ -1,0 +1,4 @@
+# Containers Configuration
+runtimes: [docker, containerd, podman]
+orchestration: [kubernetes, docker_swarm, nomad]
+registries: [dockerhub, gcr, ecr, ghcr]
