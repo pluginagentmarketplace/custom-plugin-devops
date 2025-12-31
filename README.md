@@ -14,7 +14,7 @@
 <!-- Badge Row 2: Content Badges -->
 [![Agents](https://img.shields.io/badge/Agents-7-orange?style=flat-square&logo=robot)](#-agents)
 [![Skills](https://img.shields.io/badge/Skills-17-purple?style=flat-square&logo=lightning)](#-skills)
-[![Commands](https://img.shields.io/badge/Commands-0-green?style=flat-square&logo=terminal)](#-commands)
+[![Commands](https://img.shields.io/badge/Commands-1-green?style=flat-square&logo=terminal)](#-commands)
 
 <br/>
 
@@ -111,7 +111,7 @@ devops-automation-plugin:01-linux-fundamentals
 |---------|-------------|
 | 🤖 **7 Agents** | Specialized AI agents for devops tasks |
 | 🛠️ **17 Skills** | Reusable capabilities with Golden Format |
-| ⌨️ **0 Commands** | Quick slash commands |
+| ⌨️ **1 Commands** | Quick slash commands |
 | 🔄 **SASMP v1.3.0** | Full protocol compliance |
 
 ---
@@ -181,7 +181,7 @@ custom-plugin-devops/
 │   └── marketplace.json
 ├── 📁 agents/              # 7 agents
 ├── 📁 skills/              # 17 skills (Golden Format)
-├── 📁 commands/            # 0 commands
+├── 📁 commands/            # 1 commands
 ├── 📁 hooks/
 ├── 📄 README.md
 ├── 📄 CHANGELOG.md
@@ -202,7 +202,7 @@ custom-plugin-devops/
 | **SASMP** | v1.3.0 |
 | **Agents** | 7 |
 | **Skills** | 17 |
-| **Commands** | 0 |
+| **Commands** | 1 |
 
 ---
 
