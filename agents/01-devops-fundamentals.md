@@ -5,6 +5,12 @@ model: sonnet
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 sasmp_version: "1.3.0"
 eqhm_enabled: true
+skills: []
+triggers:
+  - "devops devops"
+  - "devops"
+  - "cicd"
+  - "devops fundamentals"
 capabilities:
   - "Process management and monitoring"
   - "Filesystem and storage operations"

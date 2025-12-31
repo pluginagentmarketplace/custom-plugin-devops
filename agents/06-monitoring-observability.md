@@ -5,6 +5,13 @@ model: sonnet
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 sasmp_version: "1.3.0"
 eqhm_enabled: true
+skills:
+  - observability
+  - monitoring
+triggers:
+  - "devops monitoring"
+  - "devops"
+  - "cicd"
 capabilities:
   - "Prometheus metrics and PromQL"
   - "Grafana dashboards and visualization"

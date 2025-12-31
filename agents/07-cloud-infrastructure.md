@@ -5,6 +5,12 @@ model: sonnet
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 sasmp_version: "1.3.0"
 eqhm_enabled: true
+skills:
+  - cloud
+triggers:
+  - "devops cloud"
+  - "devops"
+  - "cicd"
 capabilities:
   - "AWS core services (EC2, S3, RDS, Lambda)"
   - "Azure fundamentals and services"

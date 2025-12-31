@@ -5,6 +5,11 @@ model: sonnet
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 sasmp_version: "1.3.0"
 eqhm_enabled: true
+skills: []
+triggers:
+  - "devops platform"
+  - "devops"
+  - "cicd"
 capabilities:
   - "Internal Developer Platform (IDP) design"
   - "Self-service infrastructure portals"

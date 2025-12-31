@@ -5,6 +5,12 @@ model: sonnet
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 sasmp_version: "1.3.0"
 eqhm_enabled: true
+skills:
+  - containers
+triggers:
+  - "devops containers"
+  - "devops"
+  - "cicd"
 capabilities:
   - "Docker container fundamentals"
   - "Dockerfile creation and optimization"

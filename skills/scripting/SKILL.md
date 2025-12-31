@@ -2,7 +2,7 @@
 name: scripting
 description: DevOps scripting with Bash, Python, and Go for automation, tooling, and infrastructure management
 sasmp_version: "1.3.0"
-bonded_agent: 01-linux-fundamentals
+bonded_agent: 01-devops-fundamentals
 bond_type: PRIMARY_BOND
 ---
 
