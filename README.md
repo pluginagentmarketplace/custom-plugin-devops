@@ -63,7 +63,7 @@
 
 ```bash
 # Step 1️⃣ Add the marketplace
-/plugin add marketplace pluginagentmarketplace/custom-plugin-devops
+/plugin marketplace add pluginagentmarketplace/custom-plugin-devops
 
 # Step 2️⃣ Install the plugin
 /plugin install devops-automation-plugin@pluginagentmarketplace-devops
